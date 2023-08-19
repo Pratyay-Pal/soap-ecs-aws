@@ -3,7 +3,7 @@ run-name: ${{ github.actor }} Create Img, push to ECR
 on:
   push:
     branches:
-      - 'release/**'
+      - 'master'
 jobs:
   Explore-GitHub-Actions:
     name: Github Actions
