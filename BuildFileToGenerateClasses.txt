@@ -1,0 +1,76 @@
+SOURCE: https://gdpotter.com/2017/08/14/jaxb-gradle-config/
+
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '2.7.6'
+	id 'io.spring.dependency-management' version '1.0.15.RELEASE'	
+}
+
+group = 'com.web'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+repositories {
+	mavenCentral()
+}
+
+configurations {
+    jaxb
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-web-services'
+	runtimeOnly 'com.h2database:h2'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	jaxb 'com.sun.xml.bind:jaxb-xjc:2.1.7'
+	
+}
+
+task genJaxb {
+  ext.sourcesDir = "${buildDir}/generated-sources/jaxb"
+  ext.classesDir = "${buildDir}/classes/jaxb"
+  ext.schema = "${projectDir}/src/main/resources/course-details.xsd"
+  
+outputs.dir classesDir
+
+  doLast() {
+    project.ant {
+      // Create output directories
+      mkdir(dir: sourcesDir)
+      mkdir(dir: classesDir)
+
+      taskdef name: 'xjc', classname: 'com.sun.tools.xjc.XJCTask', classpath: configurations.jaxb.asPath
+
+      xjc(destdir: sourcesDir, schema: schema, 'package': 'com.web.soapapi') {
+        produces(dir: sourcesDir, includes: '**/*.java')
+      }
+
+      javac(destdir: classesDir, source: 1.8, target: 1.8, debug: true,
+            debugLevel: 'lines,vars,source',
+            includeantruntime: false,
+            classpath: configurations.jaxb.asPath) {
+        src(path: sourcesDir)
+        include(name: '**/*.java')
+        include(name: '*.java')
+      }
+
+      copy(todir: classesDir) {
+        fileset(dir: sourcesDir, erroronmissingdir: false) {
+          exclude(name: '**/*.java')
+        }
+      }
+    }
+  }
+}
+
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+compileJava.dependsOn 'genJaxb'
+
+jar {
+  from genJaxb.classesDir
+}

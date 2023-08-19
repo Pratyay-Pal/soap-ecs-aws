@@ -1,0 +1,10 @@
+<Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/">
+    <Body>
+        <PartnerRequest xmlns="http://partnerfiles.com/payload">
+            <id xmlns="">1</id>
+            <owner xmlns="">abc</owner>
+            <timestamp xmlns="">2</timestamp>
+            <payload xmlns="">abcd</payload>
+        </PartnerRequest>
+    </Body>
+</Envelope>

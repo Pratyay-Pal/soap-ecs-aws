@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://partnerfiles.com/payload" xmlns:tns="http://partnerfiles.com/payload">
+
+  <xs:element name="PartnerRequest">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element type="xs:int" name="id"/>
+        <xs:element type="xs:string" name="owner"/>
+        <xs:element type="xs:int" name="timestamp"/>
+        <xs:element type="xs:string" name="payload"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  
+  <xs:element name="PartnerResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element type="tns:Status" name="status"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  
+  <xs:simpleType name="Status">
+  	<xs:restriction base="xs:string">
+  		<xs:enumeration value="SUCCESS"></xs:enumeration>
+  		<xs:enumeration value="FAILURE"></xs:enumeration>
+  	</xs:restriction>
+  </xs:simpleType>
+  
+</xs:schema>
