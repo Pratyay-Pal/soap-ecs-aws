@@ -8,7 +8,6 @@ On deploying the image on any environment, the Web Service will be accessible.
 The workflow contains details to build the image and upload it to AWS ECR Repository named api-repo.
 
 
-
 #### How to use this?
 
 Clone the repository and run as Java Application. Access the WSDL through http://localhost:8080/partner.wsdl.
